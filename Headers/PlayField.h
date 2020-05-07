@@ -1,31 +1,45 @@
 //
 // Created by Sam Petrov on 22.04.2020.
 //
-#include <vector>
-
 #ifndef TICTACTOE_PLAYFIELD_H
 #define TICTACTOE_PLAYFIELD_H
+
+#include <vector>
+
 class PlayField{
 public:
-    enum class csState;
-    enum class fnState;
-    static const int SIZE_FIELD = 9;
+    enum csState {
+        csEmpty,
+        csCross,
+        csNought
+    };
+
+    enum fnState {
+        fsInvalid,
+        fsNormal,
+        fsCrossesWin,
+        fsNoughtsWin,
+        fsDraw
+    };
+
     class CellPos{
-        private:
-            int x, y;
-        public:
-            CellPos(int, int);
-            int getIndex();
+    public:
+        CellPos(int, int);
+        operator int() const;
+    private:
+        int x, y;
     };
 
     PlayField();
-    csState operator[](CellPos);
+    csState operator[](CellPos) const;
+    void print() const;
     std::vector<CellPos> getEmptyCells() const;
     fnState checkFieldStatus() const;
     PlayField makeMove(CellPos) const;
 private:
-    csState previosState;
-    csState cellField[SIZE_FIELD]{};
-    PlayField operator+(CellPos);
+    static constexpr int HEIGHT_FIELD = 3;
+    static constexpr int SIZE_FIELD = HEIGHT_FIELD * HEIGHT_FIELD;
+    csState cellField[SIZE_FIELD];
+    PlayField operator+(CellPos) const;
 };
 #endif //TICTACTOE_PLAYFIELD_H

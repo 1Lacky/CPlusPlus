@@ -1,26 +1,26 @@
 //
 // Created by Sam Petrov on 22.04.2020.
 //
+#ifndef TICTACTOE_TREENODE_H
+#define TICTACTOE_TREENODE_H
+
 #include <vector>
 #include "PlayField.h"
 
-#ifndef TICTACTOE_TREENODE_H
-#define TICTACTOE_TREENODE_H
 class TreeNode{
+public:
+    TreeNode(const PlayField f, TreeNode *p = nullptr): field(f), parent(p) {}
+    ~TreeNode();
+    TreeNode* getParent() const;
+    void addChild(PlayField);
+    TreeNode& operator[](int) const;
+    int childCount() const;
+    PlayField const& value() const;
 private:
+    int childQty() const;
+
     const PlayField field;
     TreeNode *parent;
     std::vector<TreeNode*> children;
-
-    int childQty() const;
-public:
-    TreeNode* getParent(); // Удобный метод для отладки
-    TreeNode(PlayField, TreeNode* = nullptr);
-    ~TreeNode();
-    bool isTerminal();
-    void addChild(PlayField);
-    TreeNode& operator[](int);
-    int childCount();
-    PlayField const& value();
 };
 #endif //TICTACTOE_TREENODE_H

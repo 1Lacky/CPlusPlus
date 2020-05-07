@@ -3,100 +3,149 @@
 //
 #include <vector>
 #include <cassert>
-#include "../Headers/PlayField.h"
-
-enum class PlayField::csState{
-        csEmpty,
-        csCross,
-        csNought
-};
-enum class PlayField::fnState{
-        fsInvalid,
-        fsNormal,
-        fsCrossesWin,
-        fsNoughtsWin,
-        fsDraw
-};
+#include <iostream>
+#include "PlayField.h"
 
 PlayField::PlayField() {
-    previosState = csState::csCross;
-    for(int i = 0; i < 9; ++i)
-        cellField[i] = csState::csEmpty;
+    for(int i = 0; i < HEIGHT_FIELD; ++i)
+        for(int j = 0; j < HEIGHT_FIELD; ++j)
+            cellField[CellPos(i, j)] = csEmpty;
 }
 
 PlayField::CellPos::CellPos(int a, int b) {
-    assert((a >= 0 && a <= 2) && (b >= 0 && b <= 2));
+    assert((0 <= a && a < HEIGHT_FIELD) && (0 <= b && b < HEIGHT_FIELD));
     x = a;
     y = b;
 }
 
-int PlayField::CellPos::getIndex() {
-    return 3 * this->x + this->y;
+PlayField::CellPos::operator int() const {
+    return HEIGHT_FIELD * x + y;
 }
 
-PlayField::csState PlayField::operator[](PlayField::CellPos item){
-    return cellField[item.getIndex()];
+PlayField::csState PlayField::operator[](PlayField::CellPos item) const {
+    return cellField[item];
 }
 
-PlayField PlayField::operator+(PlayField::CellPos item){
-    auto res = *this;
-    res.cellField[item.getIndex()] = previosState;
-    if(res.previosState == csState::csCross)
-        res.previosState = csState::csNought;
-    else
-        res.previosState = csState::csCross;
-    return res;
+void PlayField::print() const {
+    for(int i = 0; i < HEIGHT_FIELD; ++i) {
+        for(int j = 0; j < HEIGHT_FIELD; ++j) {
+            char symbol;
+            if(cellField[CellPos(i, j)] == csCross)
+                symbol = 'X';
+            else if(cellField[CellPos(i, j)] == csNought)
+                symbol = '0';
+            else
+                symbol = ' ';
+            std::cout<<"|"<<symbol;
+        }
+        std::cout<<"|"<<std::endl;
+    }
+}
+
+PlayField PlayField::operator+(PlayField::CellPos item)  const {
+    auto countCross = 0;
+    auto countNought = 0;
+
+    for(auto elem : cellField)
+        if(elem == csCross)
+            countCross++;
+        else if(elem == csNought)
+            countNought++;
+
+    auto result = *this;
+    result.cellField[item] = (countCross - countNought == 1) ? csNought : csCross;
+    return result;
 }
 
 std::vector<PlayField::CellPos> PlayField::getEmptyCells() const {
     std::vector<CellPos> result;
     for (int i = 0; i < SIZE_FIELD ; ++i)
-        if(cellField[i] == csState::csEmpty)
-            result.emplace_back(i / 3, i % 3);
+        if(cellField[i] == csEmpty)
+            result.emplace_back(i / HEIGHT_FIELD, i % HEIGHT_FIELD);
     return result;
 }
 
 PlayField PlayField::makeMove(PlayField::CellPos item) const {
-    auto kek1 = cellField[item.getIndex()] == csState::csEmpty;
-    auto kek2 = checkFieldStatus() == fnState::fsNormal;
-    assert(kek1 && kek2);
-    auto result = *this;
-    return result + item;
+    assert(cellField[item] == csEmpty && checkFieldStatus() == fsNormal);
+    return  *this + item;
 }
 
 PlayField::fnState PlayField::checkFieldStatus() const {
     auto countCross = 0;
     auto countNought = 0;
-    auto win = csState::csEmpty;
+    auto winCross = false;
+    auto winNought = false;
 
     for(auto elem : cellField)
-        if(elem == csState::csCross)
+        if(elem == csCross)
             countCross++;
-        else if(elem == csState::csNought)
+        else if(elem == csNought)
             countNought++;
 
-    if(std::abs(countCross-countNought) > 1)
-        return fnState::fsInvalid;
+    auto diff = countCross-countNought;
+    if(0 > diff || diff > 1)
+        return fsInvalid;
 
-    for(int i = 0; i < 3; ++i)
-        if(cellField[3 * i] != csState::csEmpty && cellField[3 * i] == cellField[3 * i + 1] && cellField[3 * i + 1] == cellField[3 * i + 2])
-            win = cellField[3 * i];
-    for(int i = 0; i < 3; ++i)
-        if(cellField[i] != csState::csEmpty && cellField[i]== cellField[i + 3] && cellField[i + 3] == cellField[i + 6])
-            win = cellField[i];
+    // Проверяем горизонталь
+    for(int i = 0; i < HEIGHT_FIELD; ++i) {
+        bool horizontal = true;
+        for(int j = 1; j < HEIGHT_FIELD; ++j) {
+            auto flag = cellField[CellPos(i, j - 1)] == cellField[CellPos(i, j)];
+            horizontal = (horizontal) ? flag : false;
+        }
+        if(horizontal && cellField[CellPos(i, 0)] == csNought)
+            winNought = true;
+        if(horizontal && cellField[CellPos(i, 0)] == csCross)
+            winCross = true;
+    }
+    // Проверяем вертикаль
+    for(int i = 0; i < HEIGHT_FIELD; ++i) {
+        bool vertical = true;
+        for(int j = 1; j < HEIGHT_FIELD; ++j) {
+            auto flag = cellField[CellPos(j - 1, i)] == cellField[CellPos(j, i)] ;
+            vertical = (vertical) ? flag : false;
+        }
+        if(vertical && cellField[CellPos(0, i)] == csNought)
+            winNought = true;
+        if(vertical && cellField[CellPos(0, i)] == csCross)
+            winCross = true;
+    }
+    // Главная диагональ
+    int i = 1;
+    int j = 1;
+    bool mainDiagonal = true;
+    while(i < HEIGHT_FIELD){
+        auto flag = cellField[CellPos(i - 1, j - 1)] == cellField[CellPos(i, j)];
+        mainDiagonal = (mainDiagonal) ? flag : false;
+        i++;
+        j++;
+    }
+    // Побочная диагональ
+    i = 1;
+    j = 1;
+    bool sideDiagonal = true;
+    while(i < HEIGHT_FIELD){
+        auto flag = cellField[CellPos(i - 1, j + 1)] == cellField[CellPos(i, j)];
+        sideDiagonal = (sideDiagonal) ? flag : false;
+        i++;
+        j--;
+    }
+    //  Проверка победившего по диагонали
+    int midPos = HEIGHT_FIELD / 2;
+    if((mainDiagonal || sideDiagonal) && cellField[CellPos(midPos, midPos)] == csNought)
+        winNought = true;
+    if((mainDiagonal || sideDiagonal) && cellField[CellPos(midPos, midPos)] == csCross)
+        winCross = true;
 
-    if(cellField[0] != csState::csEmpty && cellField[0] == cellField[4] && cellField[4] == cellField[8])
-        win = cellField[0];
-    else if(cellField[2] != csState::csEmpty && cellField[2] == cellField[4] && cellField[4] == cellField[6])
-        win = cellField[2];
+    assert(!(winCross && winNought));
 
-    if(win == csState::csEmpty && countCross + countNought == SIZE_FIELD)
-        return fnState::fsDraw;
-    else if(win == csState::csCross)
-        return fnState::fsCrossesWin;
-    else if(win == csState::csNought)
-        return fnState::fsNoughtsWin;
+    if(winCross)
+        return fsCrossesWin;
+    else if(winNought)
+        return fsNoughtsWin;
+    else if(countCross + countNought == SIZE_FIELD)
+        return fsDraw;
     else
-        return fnState::fsNormal;
+        return fsNormal;
 }
 
