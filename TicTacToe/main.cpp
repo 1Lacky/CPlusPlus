@@ -2,7 +2,6 @@
 #include <queue>
 #include <string>
 #include <cassert>
-#include "PlayField.h"
 #include "TreeNode.h"
 
 struct Counter {
@@ -10,7 +9,7 @@ struct Counter {
     int noughtsWin = 0;
     int draw = 0;
 
-    Counter operator+(Counter elem) {
+    Counter operator+(Counter elem) const {
         Counter res = *this;
         res.crossesWin += elem.crossesWin;
         res.noughtsWin += elem.noughtsWin;
@@ -23,7 +22,7 @@ struct Counter {
          return out;
     }
 
-    int overall(){
+    int overall() const {
         return crossesWin + noughtsWin + draw;
     }
 };
@@ -37,13 +36,13 @@ void BuildSubTree(TreeNode& node) {
 }
 
 void WalkTree(const TreeNode& node) {
-    auto totalCount = Counter();
+    Counter totalCount;
     for(int i = 0; i < node.childCount(); ++i) {
-        auto localCount = Counter();
-        std::queue<TreeNode> queue;
-        queue.push(node[i]);
+        Counter localCount;
+        std::queue<TreeNode*> queue;
+        queue.push(&node[i]);
         while(!queue.empty()) {
-            auto active = queue.front();
+            auto active = *queue.front();
             switch (active.value().checkFieldStatus()) {
                 case PlayField::fsCrossesWin:
                     localCount.crossesWin++;
@@ -55,11 +54,11 @@ void WalkTree(const TreeNode& node) {
                     localCount.draw++;
                     break;
                 case PlayField::fsInvalid:
-                    assert(active.value().checkFieldStatus() == PlayField::fsInvalid);
+                    assert("Play field Invalid" && false);
                     break;
             }
             for (int j = 0; j < active.childCount(); ++j)
-                queue.push(active[j]);
+                queue.push(&active[j]);
             queue.pop();
         }
         node[i].value().print();
@@ -71,8 +70,7 @@ void WalkTree(const TreeNode& node) {
 }
 
 int main() {
-    PlayField pf0;
-    TreeNode node0(pf0);
+    TreeNode node0((PlayField()));
     BuildSubTree(node0);
     WalkTree(node0);
     return 0;

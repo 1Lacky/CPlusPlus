@@ -52,7 +52,6 @@ int PlayField::diffCrossAndNought() const {
         else if(elem == csNought)
             countNought++;
     auto diff = countCross - countNought;
-    assert(diff == 1 || diff == 0);
     return diff;
 }
 
@@ -60,7 +59,11 @@ PlayField PlayField::operator+(PlayField::CellPos item) const {
     assert(cellField[item] == csEmpty && checkFieldStatus() == fsNormal);
     auto result = *this;
     auto diff = diffCrossAndNought();
-    result.cellField[item] = (diff == 1) ? csNought : csCross;
+    assert(diff == 1 || diff == 0);
+    if(diff == 1)
+        result.cellField[item] = csNought;
+    else if(diff == 0)
+        result.cellField[item] = csCross;
     return result;
 }
 

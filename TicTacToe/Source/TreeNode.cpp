@@ -2,7 +2,6 @@
 // Created by Sam Petrov on 22.04.2020.
 //
 #include "TreeNode.h"
-#include "PlayField.h"
 #include <cassert>
 
 int TreeNode::childQty() const {
@@ -13,6 +12,10 @@ void TreeNode::addChild(PlayField f) {
     assert(childCount() <= childQty());
     children.push_back(new TreeNode(f, this));
 }
+/*TreeNode::~TreeNode(){
+    for(auto item : children)
+        delete item;
+}*/
 
 TreeNode& TreeNode::operator[](int pos) const {
     return *children[pos];
