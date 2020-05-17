@@ -1,20 +1,12 @@
 //
 // Created by Sam Petrov on 22.04.2020.
 //
-#include "../Headers/TreeNode.h"
+#include "TreeNode.h"
+#include "PlayField.h"
 #include <cassert>
 
-TreeNode::~TreeNode() {
-    for(auto item : children)
-        delete item;
-}
-
 int TreeNode::childQty() const {
-    return field.getEmptyCells().size();
-}
-
-TreeNode* TreeNode::getParent() const{
-    return parent;
+    return (parent == nullptr) ? PlayField::FIELD_SIZE : parent->childQty() - 1;
 }
 
 void TreeNode::addChild(PlayField f) {
@@ -30,6 +22,6 @@ int TreeNode::childCount() const {
     return children.size();
 }
 
-PlayField const& TreeNode::value() const {
+const PlayField& TreeNode::value() const {
     return field;
 }

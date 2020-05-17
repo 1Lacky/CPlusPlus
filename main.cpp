@@ -1,51 +1,79 @@
 #include <iostream>
+#include <queue>
+#include <string>
+#include <cassert>
 #include "PlayField.h"
 #include "TreeNode.h"
 
-int countCrossesWinTotal = 0;
-int countNoughtsWinTotal = 0;
-int countDrawTotal = 0;
+struct Counter {
+    int crossesWin = 0;
+    int noughtsWin = 0;
+    int draw = 0;
 
-int countCrossesWin = 0;
-int countNoughtsWin = 0;
-int countDraw = 0;
-
-void BuildSubTree(TreeNode node){
-    auto f = node.value();
-    switch (node.value().checkFieldStatus()){
-        case f.fsInvalid:
-            return;
-        case f.fsCrossesWin:
-            countCrossesWin++;
-            return;
-        case f.fsNoughtsWin:
-            countNoughtsWin++;
-            return;
-        case f.fsDraw:
-            countDraw++;
-            return;
+    Counter operator+(Counter elem) {
+        Counter res = *this;
+        res.crossesWin += elem.crossesWin;
+        res.noughtsWin += elem.noughtsWin;
+        res.draw += elem.draw;
+        return res;
     }
-    for(auto item : node.value().getEmptyCells()) {
-        node.addChild(node.value().makeMove(item));
-        BuildSubTree(node[node.childCount()-1]);
-        if(node.getParent() == nullptr) {
-            node[node.childCount()-1].value().print();
-            std::cout << "X " << countCrossesWin << ", 0 " << countNoughtsWin << ", D " << countDraw << std::endl;
-            countCrossesWinTotal += countCrossesWin;
-            countNoughtsWinTotal += countNoughtsWin;
-            countDrawTotal +=  countDraw;
-            countCrossesWin = 0;
-            countNoughtsWin = 0;
-            countDraw = 0;
+
+     friend std::ostream& operator<<(std::ostream &out, Counter &c)  {
+         out << "X " << c.crossesWin << ", 0 " << c.noughtsWin << ", D " << c.draw << std::endl;
+         return out;
+    }
+
+    int overall(){
+        return crossesWin + noughtsWin + draw;
+    }
+};
+
+void BuildSubTree(TreeNode& node) {
+    if(node.value().checkFieldStatus() == PlayField::fsNormal)
+        for(auto item : node.value().getEmptyCells()) {
+            node.addChild(node.value().makeMove(item));
+            BuildSubTree(node[node.childCount()-1]);
         }
+}
+
+void WalkTree(const TreeNode& node) {
+    auto totalCount = Counter();
+    for(int i = 0; i < node.childCount(); ++i) {
+        auto localCount = Counter();
+        std::queue<TreeNode> queue;
+        queue.push(node[i]);
+        while(!queue.empty()) {
+            auto active = queue.front();
+            switch (active.value().checkFieldStatus()) {
+                case PlayField::fsCrossesWin:
+                    localCount.crossesWin++;
+                    break;
+                case PlayField::fsNoughtsWin:
+                    localCount.noughtsWin++;
+                    break;
+                case PlayField::fsDraw:
+                    localCount.draw++;
+                    break;
+                case PlayField::fsInvalid:
+                    assert(active.value().checkFieldStatus() == PlayField::fsInvalid);
+                    break;
+            }
+            for (int j = 0; j < active.childCount(); ++j)
+                queue.push(active[j]);
+            queue.pop();
+        }
+        node[i].value().print();
+        std::cout << localCount;
+        totalCount = totalCount + localCount;
     }
+    std::cout <<"TOTAL " << totalCount;
+    std::cout << "OVERALL " << totalCount.overall() << std::endl;
 }
 
 int main() {
     PlayField pf0;
     TreeNode node0(pf0);
     BuildSubTree(node0);
-    std::cout <<"TOTAL "<< "X " << countCrossesWinTotal << ", 0 " << countNoughtsWinTotal << ", D " << countDrawTotal << std::endl;
-    std::cout <<"OVERALL "<< countCrossesWinTotal + countNoughtsWinTotal + countDrawTotal << std::endl;
+    WalkTree(node0);
     return 0;
 }

@@ -22,24 +22,27 @@ public:
         fsDraw
     };
 
+    static constexpr int FIELD_HEIGHT = 3;
+    static constexpr int FIELD_SIZE = FIELD_HEIGHT * FIELD_HEIGHT;
+
     class CellPos{
     public:
         CellPos(int, int);
         operator int() const;
     private:
-        int x, y;
+        int x = 0;
+        int y = 0;
     };
 
     PlayField();
-    csState operator[](CellPos) const;
+    csState operator[](const CellPos) const;
     void print() const;
+    int diffCrossAndNought() const;
     std::vector<CellPos> getEmptyCells() const;
     fnState checkFieldStatus() const;
     PlayField makeMove(CellPos) const;
 private:
-    static constexpr int HEIGHT_FIELD = 3;
-    static constexpr int SIZE_FIELD = HEIGHT_FIELD * HEIGHT_FIELD;
-    csState cellField[SIZE_FIELD];
+    csState cellField[FIELD_SIZE];
     PlayField operator+(CellPos) const;
 };
 #endif //TICTACTOE_PLAYFIELD_H

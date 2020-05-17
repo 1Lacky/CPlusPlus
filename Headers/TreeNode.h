@@ -10,12 +10,10 @@
 class TreeNode{
 public:
     TreeNode(const PlayField f, TreeNode *p = nullptr): field(f), parent(p) {}
-    ~TreeNode();
-    TreeNode* getParent() const;
     void addChild(PlayField);
     TreeNode& operator[](int) const;
     int childCount() const;
-    PlayField const& value() const;
+    const PlayField& value() const;
 private:
     int childQty() const;
 
