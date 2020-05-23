@@ -7,20 +7,20 @@
 
 class Matrix3x3{
 public:
-    int element(const int, const int) const;
-    void setElement(const int, const int, const int);
-    void fillRandomElements(const int, const int);
+    Matrix3x3();
+    int element(const int i, const int j) const;
+    void setElement(const int i, const int j, const int value);
+    void fillRandomElements(const int minVal, const int maxVal);
     int sumPrincipalDiag()const;
     int sumSecondaryDiag() const;
     int productPrincipalDiag() const;
     int productSecondaryDiag() const;
-    int sumRow(const int) const;
-    int minColumn(const int) const;
-    int maxColumn(const int) const;
-    Matrix3x3();
+    int sumRow(const int iRow) const;
+    int minColumn(const int iCol) const;
+    int maxColumn(const int iCol) const;
 
-    static constexpr int SIZE = 3;
+    static constexpr int Size = 3;
 private:
-    int matrix[SIZE][SIZE];
+    int matrix[Size][Size];
 };
 #endif //MATRIX_MATRIX3X3_H

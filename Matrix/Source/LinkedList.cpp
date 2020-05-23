@@ -2,61 +2,54 @@
 // Created by Sam Petrov on 19.05.2020.
 //
 
-#include <cassert>
-#include <unordered_set>
 #include "LinkedList.h"
+#include <unordered_set>
 
-int LinkedList::Item::getData() const{
-    return data;
+LinkedList::Item::Item(int data, Item* item) {
+    Data =  data;
+    Previous = item;
 }
 
-LinkedList::Item* LinkedList::Item:: getPrevious() const{
-    return previous;
+int LinkedList::Item::getData() const {
+    return Data;
 }
 
-void LinkedList::Item::setData(int d){
-    data = d;
+LinkedList::Item* LinkedList::Item::getPrevious() const {
+    return Previous;
 }
 
 void LinkedList::Item::setPrevious(LinkedList::Item* item) {
-    previous = item;
+    Previous = item;
 }
 
 LinkedList::Item::~Item(){
-    delete(previous);
-}
-
-LinkedList::LinkedList() {
-    head = nullptr;
-    tail = nullptr;
+    delete(Previous);
 }
 
 LinkedList::~LinkedList(){
-    delete(tail);
+    delete(Tail);
 }
 
-void LinkedList::addItem(int n) {
-    Item *tmp = new Item;
-    tmp->setData(n);
-    tmp->setPrevious(tail);
+void LinkedList::addItem(int data) {
+    Item* tmp = new Item(data, Tail);
 
-    if(head == nullptr) head = tmp;
-    tail = tmp;
+    if(Head == nullptr)
+        Head = tmp;
+    Tail = tmp;
 }
 
-LinkedList::Item* LinkedList::searchItem(int k) const {
-    assert(k > 0);
-    auto current = tail;
-    --k;
-    while(current != nullptr && k > 0){
+LinkedList::Item* LinkedList::searchItem(int data) const {
+    Item* current = Tail;
+    --data;
+    while(current != nullptr && data > 0){
         current = current->getPrevious();
-        --k;
+        --data;
     }
-    return (k > 0) ? nullptr : current;
+    return (data > 0) ? nullptr : current;
 }
 
 void LinkedList::deleteDuplicates() {
-    auto current = tail;
+    Item* current = Tail;
     std::unordered_set <int> set;
     Item* previous = nullptr;
 
@@ -64,8 +57,12 @@ void LinkedList::deleteDuplicates() {
         if (set.find(current->getData()) == set.end()) {
             set.insert(current->getData());
             previous = current;
-        } else
+            current = current->getPrevious();
+        } else {
             previous->setPrevious(current->getPrevious());
-        current = current->getPrevious();
+            current->setPrevious(nullptr);
+            delete current;
+            current = previous->getPrevious();
+        }
     }
 }

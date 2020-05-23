@@ -7,21 +7,22 @@
 
 class MatrixXnX{
 public:
-    int element(const int, const int) const;
-    void setElement(const int, const int, const int);
-    void fillRandomElements(const int, const int);
+    MatrixXnX(const int iDim);
+    int getIndex(const int i, const int j) const;
+    int element(const int i, const int j) const;
+    void setElement(const int i, const int j, const int value);
+    void fillRandomElements(const int minVal, const int maxVal);
     int sumPrincipalDiag()const;
     int sumSecondaryDiag() const;
     int productPrincipalDiag() const;
     int productSecondaryDiag() const;
-    int sumRow(const int) const;
-    int minColumn(const int) const;
-    int maxColumn(const int) const;
-    MatrixXnX(const int);
+    int sumRow(const int iRow) const;
+    int minColumn(const int iCol) const;
+    int maxColumn(const int iCol) const;
     ~MatrixXnX();
 
-    const int SIZE;
+    const int Size;
 private:
-    int **matrix;
+    int *matrix;
 };
 #endif //MATRIX_MATRIXXNX_H

@@ -9,8 +9,8 @@ void useMatrix3x3() {
 
     m3.fillRandomElements(-10, 10);
 
-    for (int i = 0; i < Matrix3x3::SIZE; ++i) {
-        for (int j = 0; j < Matrix3x3::SIZE; ++j)
+    for (int i = 0; i < Matrix3x3::Size; ++i) {
+        for (int j = 0; j < Matrix3x3::Size; ++j)
             std::cout <<std::setw( 4 )<< m3.element(i, j) << " ";
         std::cout << std::endl;
     }
@@ -20,11 +20,11 @@ void useMatrix3x3() {
     std::cout << "Произведение элементов главной диагонали: " << m3.productPrincipalDiag() << std::endl;
     std::cout << "Произведение элементов побочной диагонали: " << m3.productSecondaryDiag() << std::endl;
 
-    for (int i = 0; i < Matrix3x3::SIZE; ++i)
+    for (int i = 0; i < Matrix3x3::Size; ++i)
         std::cout << "Сумма элементов в строке " << i << ": " << m3.sumRow(i) << std::endl;
-    for (int i = 0; i < Matrix3x3::SIZE; ++i)
+    for (int i = 0; i < Matrix3x3::Size; ++i)
         std::cout << "Минимальный элемент в столбце " << i << ": " << m3.minColumn(i) << std::endl;
-    for (int i = 0; i < Matrix3x3::SIZE; ++i)
+    for (int i = 0; i < Matrix3x3::Size; ++i)
         std::cout << "Максимальный элемент в столбце " << i << ": " << m3.maxColumn(i) << std::endl;
 }
 
@@ -33,8 +33,8 @@ void useMatrixXnX() {
 
     mX.fillRandomElements(-10, 10);
 
-    for (int i = 0; i < mX.SIZE; ++i) {
-        for (int j = 0; j < mX.SIZE; ++j)
+    for (int i = 0; i < mX.Size; ++i) {
+        for (int j = 0; j < mX.Size; ++j)
             std::cout <<std::setw( 4 )<< mX.element(i, j) << " ";
         std::cout << std::endl;
     }
@@ -44,11 +44,11 @@ void useMatrixXnX() {
     std::cout << "Произведение элементов главной диагонали: " << mX.productPrincipalDiag() << std::endl;
     std::cout << "Произведение элементов побочной диагонали: " << mX.productSecondaryDiag() << std::endl;
 
-    for (int i = 0; i < mX.SIZE; ++i)
+    for (int i = 0; i < mX.Size; ++i)
         std::cout << "Сумма элементов в строке " << i << ": " << mX.sumRow(i) << std::endl;
-    for (int i = 0; i < mX.SIZE; ++i)
+    for (int i = 0; i < mX.Size; ++i)
         std::cout << "Минимальный элемент в столбце " << i << ": " << mX.minColumn(i) << std::endl;
-    for (int i = 0; i < mX.SIZE; ++i)
+    for (int i = 0; i < mX.Size; ++i)
         std::cout << "Максимальный элемент в столбце " << i << ": " << mX.maxColumn(i) << std::endl;
 }
 
@@ -68,7 +68,7 @@ void useLinkedList() {
 
     list.deleteDuplicates();
 
-    for(int i = 1; i < 21 ;++i){
+    for(int i = 1; i < 21 ;++i) {
         auto result = list.searchItem(i);
         if(result == nullptr)
             std::cout << "Не найдент элемент № "<< i << std::endl;

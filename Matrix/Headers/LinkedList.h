@@ -9,23 +9,23 @@ class LinkedList {
 public:
     class Item {
     public:
+        Item(int data, Item* item);
         int getData() const;
         Item* getPrevious() const;
-        void setData(int);
-        void setPrevious(Item*);
+        void setPrevious(Item* item);
         ~Item();
-    private:
-        int data;
-        Item* previous;
 
+    private:
+        int Data;
+        Item* Previous;
     };
 
-    LinkedList();
     ~LinkedList();
-    void addItem(const int n);
-    Item* searchItem(const int k) const;
+    void addItem(const int data);
+    Item* searchItem(const int data) const;
     void deleteDuplicates();
 private:
-    Item *head,*tail;
+    Item* Head = nullptr;
+    Item* Tail = nullptr;
 };
 #endif //MATRIX_LINKEDLIST_H
