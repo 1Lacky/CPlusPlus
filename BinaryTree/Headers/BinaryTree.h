@@ -9,19 +9,17 @@
 
 class BinaryTree{
 public:
-    BinaryTree();
-    BinaryTree(TreeNode*);
-    BinaryTree(const int*, const int, const int);
+    BinaryTree(const int* array, const int start, const int end);
     ~BinaryTree();
 
-    TreeNode* search(int) const;
-    void insert(int);
+    TreeNode* search(int data) const;
+    void insert(int data);
 private:
-    TreeNode* root;
+    TreeNode* root = nullptr;
 
-    TreeNode* search(TreeNode*, int) const;
-    TreeNode* insert(TreeNode*, int);
-    static TreeNode* CreateMinimalBST(const int*, const int, const int);
+    static TreeNode* search(TreeNode* node, int data);
+    static TreeNode* insert(TreeNode* node, int data);
+    static TreeNode* CreateMinimalBST(const int* array, const int start, const int end);
 };
 
 #endif //BINARYTREE_BINARYTREE_H

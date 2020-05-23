@@ -5,42 +5,34 @@
 #include "TreeNode.h"
 
 TreeNode::TreeNode() {
-    data = 0;
-    right = nullptr;
-    left = nullptr;
+    Data = 0;
 }
 
-TreeNode::TreeNode(int d) {
-    data = d;
-    right = nullptr;
-    left = nullptr;
+TreeNode::TreeNode(int data) {
+    Data = data;
 }
 
 TreeNode::~TreeNode() {
-    delete left;
-    delete right;
+    delete Left;
+    delete Right;
 }
 
 void TreeNode::setLeft(TreeNode* node) {
-    left = node;
+    Left = node;
 }
 
 void TreeNode::setRight(TreeNode* node) {
-    right = node;
-}
-
-void TreeNode::setData(const int d) {
-    data = d;
+    Right = node;
 }
 
 TreeNode* TreeNode::getLeft() const {
-    return left;
+    return Left;
 }
 
 TreeNode* TreeNode::getRight() const {
-    return right;
+    return Right;
 }
 
 int TreeNode::getData() const {
-    return data;
+    return Data;
 }

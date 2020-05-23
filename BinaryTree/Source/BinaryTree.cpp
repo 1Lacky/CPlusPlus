@@ -2,16 +2,7 @@
 // Created by Sam Petrov on 20.05.2020.
 //
 
-#include "cmath"
 #include "BinaryTree.h"
-
-BinaryTree::BinaryTree() {
-    root= nullptr;
-}
-
-BinaryTree::BinaryTree(TreeNode* node) {
-    root = node;
-}
 
 BinaryTree::BinaryTree(const int* arr, const int start, const int end) {
     root = CreateMinimalBST(arr, start, end);
@@ -21,41 +12,41 @@ BinaryTree::~BinaryTree() {
     delete root;
 }
 
-TreeNode* BinaryTree::search(int d) const {
-    return search(root, d);
+TreeNode* BinaryTree::search(int data) const {
+    return search(root, data);
 }
 
-TreeNode* BinaryTree::search(TreeNode* node, int d) const {
-    if(node == nullptr || d == node->getData())
+TreeNode* BinaryTree::search(TreeNode* node, int data) {
+    if(node == nullptr || data == node->getData())
         return node;
-    if(d < node->getData())
-        return search(node->getLeft(), d);
+    if(data < node->getData())
+        return search(node->getLeft(), data);
     else
-        return search(node->getRight(), d);
+        return search(node->getRight(), data);
 }
 
 void BinaryTree::insert(int d) {
     insert(root, d);
 }
 
-TreeNode* BinaryTree::insert(TreeNode* node, int d) {
+TreeNode* BinaryTree::insert(TreeNode* node, int data) {
     if(node == nullptr)
-        return new TreeNode(d);
-    else if(d < node->getData())
-        node->setLeft(insert(node->getLeft(), d));
-    else if(d > node->getData())
-        node->setRight(insert(node->getRight(), d));
+        return new TreeNode(data);
+    else if(data < node->getData())
+        node->setLeft(insert(node->getLeft(), data));
+    else if(data > node->getData())
+        node->setRight(insert(node->getRight(), data));
     return node;
 }
 
-TreeNode* BinaryTree::CreateMinimalBST(const int* arr, const int start, const int end) {
+TreeNode* BinaryTree::CreateMinimalBST(const int* array, const int start, const int end) {
     if (end < start)
         return nullptr;
-    const int mid = floor((start + end) / 2);
-    TreeNode* node = new TreeNode(arr[mid]);
+    const int mid = (start + end) / 2;
+    TreeNode* node = new TreeNode(array[mid]);
 
-    node->setLeft(CreateMinimalBST(arr, start, mid - 1));
-    node->setRight(CreateMinimalBST(arr, mid + 1, end));
+    node->setLeft(CreateMinimalBST(array, start, mid - 1));
+    node->setRight(CreateMinimalBST(array, mid + 1, end));
 
     return node;
 }

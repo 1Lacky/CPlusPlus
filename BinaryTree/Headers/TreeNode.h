@@ -8,18 +8,18 @@
 class TreeNode {
 public:
     TreeNode();
-    TreeNode(int);
+    TreeNode(int data);
     ~ TreeNode();
-    void setLeft(TreeNode*);
-    void setRight(TreeNode*);
-    void setData(const int);
+
+    void setLeft(TreeNode* node);
+    void setRight(TreeNode* node);
     TreeNode* getLeft() const;
     TreeNode* getRight() const;
     int getData() const;
 private:
-    int data;
-    TreeNode* left;
-    TreeNode* right;
+    int Data;
+    TreeNode* Left = nullptr;
+    TreeNode* Right = nullptr;
 };
 
 #endif //BINARYTREE_TREENODE_H
