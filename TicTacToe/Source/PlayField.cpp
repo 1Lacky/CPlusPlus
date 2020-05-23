@@ -89,6 +89,8 @@ PlayField::fnState PlayField::checkFieldStatus() const {
     if(0 > diff || diff > 1)
         return fsInvalid;
 
+    bool mainDiagonal = true;
+    bool sideDiagonal = true;
     for(int i = 0; i < FIELD_HEIGHT; ++i) {
         // Проверяем горизонталь
         bool horizontal = true;
@@ -104,36 +106,21 @@ PlayField::fnState PlayField::checkFieldStatus() const {
                vertical = false;
                break;
            }
+        // Главная диагональ
+        if (i < FIELD_HEIGHT - 1 && cellField[CellPos(i, i)] != cellField[CellPos(i + 1, i + 1)]){
+            mainDiagonal = false;
+        }
+        // Побочная диагональ
+        if (i < FIELD_HEIGHT - 1 && cellField[CellPos(i, FIELD_HEIGHT - i - 1)] != cellField[CellPos(i + 1, FIELD_HEIGHT - i - 2)]){
+            sideDiagonal = false;
+        }
+
         if((vertical && cellField[CellPos(0, i)] == csNought) || (horizontal && cellField[CellPos(i, 0)] == csNought))
             winNought = true;
         if((vertical && cellField[CellPos(0, i)] == csCross) || (horizontal && cellField[CellPos(i, 0)] == csCross))
             winCross = true;
     }
-    // Главная диагональ
-    int i = 1;
-    int j = 1;
-    bool mainDiagonal = true;
-    while(i < FIELD_HEIGHT) {
-        if (cellField[CellPos(i - 1, j - 1)] != cellField[CellPos(i, j)]){
-            mainDiagonal = false;
-            break;
-        }
-        i++;
-        j++;
-    }
 
-    // Побочная диагональ
-    i = 1;
-    j = 1;
-    bool sideDiagonal = true;
-    while(i < FIELD_HEIGHT) {
-        if (cellField[CellPos(i - 1, j + 1)] != cellField[CellPos(i, j)]){
-            sideDiagonal = false;
-            break;
-        }
-        i++;
-        j--;
-    }
     //  Проверка победившего по диагонали
     if((mainDiagonal && cellField[CellPos(0, 0)] == csNought) || (sideDiagonal && cellField[CellPos(0, FIELD_HEIGHT - 1)] == csNought))
         winNought = true;

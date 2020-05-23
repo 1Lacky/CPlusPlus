@@ -9,8 +9,8 @@
 
 class TreeNode{
 public:
-    TreeNode(const PlayField f, TreeNode *p = nullptr): field(f), parent(p) {}
-    //~TreeNode();
+    TreeNode(const PlayField f, TreeNode* p = nullptr): field(f), parent(p) {}
+    ~TreeNode();
     void addChild(PlayField);
     TreeNode& operator[](int) const;
     int childCount() const;
@@ -19,7 +19,7 @@ private:
     int childQty() const;
 
     const PlayField field;
-    TreeNode *parent;
+    TreeNode* parent;
     std::vector<TreeNode*> children;
 };
 #endif //TICTACTOE_TREENODE_H

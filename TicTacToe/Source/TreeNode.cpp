@@ -12,10 +12,11 @@ void TreeNode::addChild(PlayField f) {
     assert(childCount() <= childQty());
     children.push_back(new TreeNode(f, this));
 }
-/*TreeNode::~TreeNode(){
-    for(auto item : children)
+
+TreeNode::~TreeNode() {
+    for (auto item : children)
         delete item;
-}*/
+}
 
 TreeNode& TreeNode::operator[](int pos) const {
     return *children[pos];

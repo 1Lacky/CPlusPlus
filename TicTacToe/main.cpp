@@ -17,7 +17,7 @@ struct Counter {
         return res;
     }
 
-     friend std::ostream& operator<<(std::ostream &out, Counter &c)  {
+     friend std::ostream& operator<<(std::ostream &out, Counter &c) {
          out << "X " << c.crossesWin << ", 0 " << c.noughtsWin << ", D " << c.draw << std::endl;
          return out;
     }
@@ -42,7 +42,7 @@ void WalkTree(const TreeNode& node) {
         std::queue<TreeNode*> queue;
         queue.push(&node[i]);
         while(!queue.empty()) {
-            auto active = *queue.front();
+            auto& active = *queue.front();
             switch (active.value().checkFieldStatus()) {
                 case PlayField::fsCrossesWin:
                     localCount.crossesWin++;
@@ -70,7 +70,8 @@ void WalkTree(const TreeNode& node) {
 }
 
 int main() {
-    TreeNode node0((PlayField()));
+    PlayField pf;
+    TreeNode node0(pf);
     BuildSubTree(node0);
     WalkTree(node0);
     return 0;
