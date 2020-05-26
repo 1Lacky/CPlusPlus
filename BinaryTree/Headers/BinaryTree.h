@@ -9,7 +9,7 @@
 
 class BinaryTree{
 public:
-    BinaryTree(const int* array, const int start, const int end);
+    BinaryTree(int* array, const int start, const int end);
     ~BinaryTree();
 
     TreeNode* search(int data) const;
@@ -20,6 +20,10 @@ private:
     static TreeNode* search(TreeNode* node, int data);
     static TreeNode* insert(TreeNode* node, int data);
     static TreeNode* CreateMinimalBST(const int* array, const int start, const int end);
+
+    static void swap(int* a, int* b);
+    static int section(int* arr, const int start,const int end);
+    static void quickSort(int* arr, const int start, const int end);
 };
 
 #endif //BINARYTREE_BINARYTREE_H
