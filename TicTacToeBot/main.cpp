@@ -1,78 +1,64 @@
+#include "XOPlayer.h"
 #include <iostream>
-#include <queue>
-#include <string>
 #include <cassert>
-#include "TreeNode.h"
 
-struct Counter {
-    int crossesWin = 0;
-    int noughtsWin = 0;
-    int draw = 0;
-
-    void operator+=(const Counter &elem) {
-        crossesWin += elem.crossesWin;
-        noughtsWin += elem.noughtsWin;
-        draw += elem.draw;
-    }
-
-    friend std::ostream& operator<<(std::ostream &out, Counter &c) {
-        out << "X " << c.crossesWin << ", 0 " << c.noughtsWin << ", D " << c.draw << std::endl;
-        return out;
-    }
-
-    int overall() const {
-        return crossesWin + noughtsWin + draw;
-    }
-};
-
-void BuildSubTree(TreeNode& node) {
-    if(node.value().checkFieldStatus() == PlayField::fsNormal)
-        for(auto item : node.value().getEmptyCells()) {
+void BuildSubTree(TreeNode &node) {
+    if (node.value().checkFieldStatus() == PlayField::fsNormal)
+        for (auto item : node.value().getEmptyCells()) {
             node.addChild(node.value().makeMove(item));
-            BuildSubTree(node[node.childCount()-1]);
+            BuildSubTree(node[node.childCount() - 1]);
         }
 }
 
-void WalkTree(const TreeNode& node) {
-    Counter totalCount;
-    for(int i = 0; i < node.childCount(); ++i) {
-        Counter localCount;
-        std::queue<TreeNode*> queue;
-        queue.push(&node[i]);
-        while(!queue.empty()) {
-            auto& active = *queue.front();
-            switch (active.value().checkFieldStatus()) {
-                case PlayField::fsCrossesWin:
-                    localCount.crossesWin++;
-                    break;
-                case PlayField::fsNoughtsWin:
-                    localCount.noughtsWin++;
-                    break;
-                case PlayField::fsDraw:
-                    localCount.draw++;
-                    break;
-                case PlayField::fsNormal:
-                    for (int j = 0; j < active.childCount(); ++j)
-                        queue.push(&active[j]);
-                    break;
-                case PlayField::fsInvalid:
-                    assert(false && "Play field Invalid");
-                    break;
+void WalkTree(TreeNode &node) {
+    switch (node.value().checkFieldStatus()) {
+        case PlayField::fsCrossesWin:
+            node.addCrossesWin();
+            break;
+        case PlayField::fsNoughtsWin:
+            node.addNoughtsWin();
+            break;
+        case PlayField::fsDraw:
+            node.addDraw();
+            break;
+        case PlayField::fsNormal:
+            for (int i = 0; i < node.childCount(); ++i) {
+                WalkTree(node[i]);
+                node += node[i];
             }
-            queue.pop();
-        }
-        node[i].value().print();
-        std::cout << localCount;
-        totalCount += localCount;
+            break;
+        case PlayField::fsInvalid:
+            assert(false && "Play field Invalid");
+            break;
     }
-    std::cout <<"TOTAL " << totalCount;
-    std::cout << "OVERALL " << totalCount.overall() << std::endl;
 }
+
 
 int main() {
     PlayField pf;
     TreeNode node0(pf);
     BuildSubTree(node0);
     WalkTree(node0);
+
+    std::cout << "Select player (0 - Xs, 1 - Os)" << std::endl;
+    int sel_player;
+    std::cin >> sel_player;
+    assert(sel_player == 0 || sel_player == 1);
+    XOPlayer player(&node0, (sel_player == 0 ? PlayField::csCross : PlayField::csNought));
+
+    do {
+        if (sel_player == 0) {
+            int x, y;
+            std::cout << "Your turn, write X Y" << std::endl;
+            std::cin >> x >> y;
+            player.makeMove(PlayField::CellPos(x, y));
+            sel_player = 1;
+        } else {
+            std::cout << "The Bot turn" << std::endl;
+            player.makeMove();
+            sel_player = 0;
+        }
+        player.currentState().print();
+    } while (player.fieldStatus() == PlayField::fsNormal);
     return 0;
 }

@@ -29,3 +29,9 @@ int TreeNode::childCount() const {
 const PlayField& TreeNode::value() const {
     return field;
 }
+
+void TreeNode::operator+=(const TreeNode &node) {
+    countOutcome.crossesWin += node.countOutcome.crossesWin;
+    countOutcome.noughtsWin += node.countOutcome.noughtsWin;
+    countOutcome.draw += node.countOutcome.draw;
+}
