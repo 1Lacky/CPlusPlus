@@ -9,7 +9,7 @@ int TreeNode::childQty() const {
 }
 
 void TreeNode::addChild(PlayField f) {
-    assert(childCount() <= childQty());
+    assert(childCount() < childQty());
     children.push_back(new TreeNode(f, this));
 }
 

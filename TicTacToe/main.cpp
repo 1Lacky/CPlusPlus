@@ -9,7 +9,7 @@ struct Counter {
     int noughtsWin = 0;
     int draw = 0;
 
-    Counter operator+(Counter elem) const {
+    Counter operator+(const Counter &elem) const {
         Counter res = *this;
         res.crossesWin += elem.crossesWin;
         res.noughtsWin += elem.noughtsWin;
