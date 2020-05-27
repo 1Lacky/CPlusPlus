@@ -9,12 +9,10 @@ struct Counter {
     int noughtsWin = 0;
     int draw = 0;
 
-    Counter operator+(const Counter &elem) const {
-        Counter res = *this;
-        res.crossesWin += elem.crossesWin;
-        res.noughtsWin += elem.noughtsWin;
-        res.draw += elem.draw;
-        return res;
+    void operator+=(const Counter &elem) const {
+        crossesWin += elem.crossesWin;
+        noughtsWin += elem.noughtsWin;
+        draw += elem.draw;
     }
 
      friend std::ostream& operator<<(std::ostream &out, Counter &c) {
@@ -53,12 +51,13 @@ void WalkTree(const TreeNode& node) {
                 case PlayField::fsDraw:
                     localCount.draw++;
                     break;
+                case PlayField::fsDraw:
+                    for (int j = 0; j < active.childCount(); ++j)
+                        queue.push(&active[j]);
                 case PlayField::fsInvalid:
                     assert("Play field Invalid" && false);
                     break;
             }
-            for (int j = 0; j < active.childCount(); ++j)
-                queue.push(&active[j]);
             queue.pop();
         }
         node[i].value().print();
