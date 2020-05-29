@@ -37,12 +37,13 @@ public:
     PlayField();
     csState operator[](const CellPos) const;
     void print() const;
-    int diffCrossAndNought() const;
     std::vector<CellPos> getEmptyCells() const;
     fnState checkFieldStatus() const;
     PlayField makeMove(CellPos) const;
 private:
-    csState cellField[FIELD_SIZE];
+    int diffCrossAndNought() const;
     PlayField operator+(CellPos) const;
+
+    csState cellField[FIELD_SIZE];
 };
 #endif //TICTACTOE_PLAYFIELD_H

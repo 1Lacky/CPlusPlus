@@ -22,15 +22,14 @@ public:
     double getCrossesWin() const { return  countOutcome.crossesWin / getTotal(); }
     double getNoughtsWin() const { return  countOutcome.noughtsWin / getTotal(); }
     double getDraw() const { return  countOutcome.draw / getTotal(); }
-    double getTotal() const { return static_cast<double>(countOutcome.crossesWin + countOutcome.crossesWin + countOutcome.draw); }
     void operator+=(const TreeNode &node);
-
 private:
     struct Counter {
         int crossesWin = 0;
         int noughtsWin = 0;
         int draw = 0;
     };
+    double getTotal() const { return static_cast<double>(countOutcome.crossesWin + countOutcome.crossesWin + countOutcome.draw); }
     int childQty() const;
 
     Counter countOutcome;

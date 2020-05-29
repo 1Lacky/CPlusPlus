@@ -8,16 +8,18 @@
 
 class XOPlayer {
 public:
-    XOPlayer(TreeNode* tree, PlayField::csState symbol);
-    void selectPlayer(PlayField::csState symbol);
+    XOPlayer() = delete;
+    XOPlayer(TreeNode &tree, PlayField::csState symbol);
     void makeMove(PlayField::CellPos iCell);
     void makeMove();
-    PlayField currentState() const { return Field; };
-    PlayField::fnState fieldStatus() const { return Field.checkFieldStatus(); };
-
+    PlayField currentState() const { return CurNode->value(); };
+    PlayField::fnState fieldStatus() const { return CurNode->value().checkFieldStatus(); };
 private:
-    TreeNode *CurNode = nullptr;
+    void selectPlayer(PlayField::csState symbol);
+    bool isBestMove(TreeNode &goodTurn, TreeNode &current) const;
+
+    TreeNode &Tree;
+    TreeNode* CurNode = nullptr;
     PlayField::csState Bot = PlayField::csEmpty;
-    PlayField Field;
 };
 #endif //TICTACTOE_XOPLAYER_H

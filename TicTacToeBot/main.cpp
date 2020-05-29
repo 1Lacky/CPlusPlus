@@ -44,7 +44,7 @@ int main() {
     int sel_player;
     std::cin >> sel_player;
     assert(sel_player == 0 || sel_player == 1);
-    XOPlayer player(&node0, (sel_player == 0 ? PlayField::csCross : PlayField::csNought));
+    XOPlayer player(node0, (sel_player == 0 ? PlayField::csCross : PlayField::csNought));
 
     do {
         if (sel_player == 0) {
