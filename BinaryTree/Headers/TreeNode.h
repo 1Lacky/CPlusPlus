@@ -7,7 +7,6 @@
 
 class TreeNode {
 public:
-    TreeNode();
     TreeNode(int data);
     ~ TreeNode();
 
@@ -17,7 +16,7 @@ public:
     TreeNode* getRight() const;
     int getData() const;
 private:
-    int Data;
+    int Data = 0;
     TreeNode* Left = nullptr;
     TreeNode* Right = nullptr;
 };

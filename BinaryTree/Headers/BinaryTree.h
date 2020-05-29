@@ -15,8 +15,6 @@ public:
     TreeNode* search(int data) const;
     void insert(int data);
 private:
-    TreeNode* root = nullptr;
-
     static TreeNode* search(TreeNode* node, int data);
     static TreeNode* insert(TreeNode* node, int data);
     static TreeNode* CreateMinimalBST(const int* array, const int start, const int end);
@@ -24,6 +22,8 @@ private:
     static void swap(int* a, int* b);
     static int section(int* arr, const int start,const int end);
     static void quickSort(int* arr, const int start, const int end);
+
+    TreeNode* root = nullptr;
 };
 
 #endif //BINARYTREE_BINARYTREE_H
