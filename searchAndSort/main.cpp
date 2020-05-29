@@ -116,7 +116,10 @@ int main() {
     fillArray(searchArray, searchSize, -1000, 1000);
     printArray(searchArray, searchSize);
     result = Search(searchArray, searchSize, 124);
-    std::cout << ((result == -1) ? "Element not found" : "Item found at position "+result) << std::endl;
+    if(result == -1)
+        std::cout << "Element not found" << std::endl;
+    else
+        std::cout << "Item found at position "<< result << std::endl;
 
     //Алгоритм рекурсивной сортировки recursionQuickSort() массива
     int sortSize = 100;
@@ -134,11 +137,17 @@ int main() {
 
     //Алгоритм рекурсивного бинарного поиска recursionBSearch() массива
     result = recursionBSearch(sortedArray, 6, 0, sortSize);
-    std::cout << ((result == -1) ? "Element not found" : "Item found at position "+result) << std::endl;
+    if(result == -1)
+        std::cout << "Element not found" << std::endl;
+    else
+        std::cout << "Item found at position "<< result << std::endl;
 
     //Алгоритм не рекурсивного бинарного поиска iterativeBSearch() массива
     result = iterativeBSearch(sortedArray, 6, 0, sortSize);
-    std::cout << ((result == -1) ? "Element not found" : "Item found at position "+result) << std::endl;
+    if(result == -1)
+        std::cout << "Element not found" << std::endl;
+    else
+        std::cout << "Item found at position "<< result << std::endl;
 
     //Сравнение скороости выполнения поиска элемента
     int array[searchSize];
