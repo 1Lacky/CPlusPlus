@@ -4,10 +4,6 @@
 
 #include "TreeNode.h"
 
-TreeNode::TreeNode() {
-    Data = 0;
-}
-
 TreeNode::TreeNode(int data) {
     Data = data;
 }
