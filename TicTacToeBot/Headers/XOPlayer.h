@@ -16,7 +16,7 @@ public:
     PlayField::fnState fieldStatus() const { return CurNode->value().checkFieldStatus(); };
 private:
     void selectPlayer(PlayField::csState symbol);
-    bool isBestMove(TreeNode &goodTurn, TreeNode &current) const;
+    bool isBestMove(const TreeNode &goodTurn,const TreeNode &current) const;
 
     TreeNode &Tree;
     TreeNode* CurNode = nullptr;

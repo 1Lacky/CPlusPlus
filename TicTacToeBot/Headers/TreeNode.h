@@ -9,7 +9,7 @@
 
 class TreeNode{
 public:
-    TreeNode(const PlayField f, TreeNode* p = nullptr): field(f), parent(p) {}
+    TreeNode(const PlayField f = PlayField(), TreeNode* p = nullptr): field(f), parent(p) {}
     ~TreeNode();
     void addChild(PlayField);
     TreeNode& operator[](int) const;
@@ -19,9 +19,8 @@ public:
     void addCrossesWin() {  countOutcome.crossesWin++; }
     void addNoughtsWin() {  countOutcome.noughtsWin++; }
     void addDraw() { countOutcome.draw++; }
-    double getCrossesWin() const { return  countOutcome.crossesWin / getTotal(); }
-    double getNoughtsWin() const { return  countOutcome.noughtsWin / getTotal(); }
-    double getDraw() const { return  countOutcome.draw / getTotal(); }
+    double getCrossesWinRatio() const { return (countOutcome.crossesWin + countOutcome.draw) / getTotal(); }
+    double getNoughtsWinRatio() const { return (countOutcome.noughtsWin + countOutcome.draw) / getTotal(); }
     void operator+=(const TreeNode &node);
 private:
     struct Counter {

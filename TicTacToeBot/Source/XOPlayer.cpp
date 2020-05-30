@@ -11,6 +11,7 @@ XOPlayer::XOPlayer(TreeNode &tree, PlayField::csState symbol): Tree(tree) {
 }
 
 void XOPlayer::selectPlayer(PlayField::csState symbol) {
+    assert(symbol != PlayField::csEmpty);
     Bot = (symbol == PlayField::csCross) ? PlayField::csNought : PlayField::csCross;
 }
 
@@ -23,10 +24,9 @@ void XOPlayer::makeMove(PlayField::CellPos iCell) {
         }
 }
 
-bool XOPlayer::isBestMove(TreeNode &goodTurn, TreeNode &current) const {
-    return (Bot == PlayField::csCross && current.getCrossesWin() > goodTurn.getCrossesWin()
-            || Bot == PlayField::csNought && current.getNoughtsWin() > goodTurn.getNoughtsWin())
-            && current.getDraw() > goodTurn.getDraw();
+bool XOPlayer::isBestMove(const TreeNode &goodTurn,const TreeNode &current) const {
+    return Bot == PlayField::csCross && current.getCrossesWinRatio() > goodTurn.getCrossesWinRatio()
+           || Bot == PlayField::csNought && current.getNoughtsWinRatio() > goodTurn.getNoughtsWinRatio();
 }
 
 void XOPlayer::makeMove() {
