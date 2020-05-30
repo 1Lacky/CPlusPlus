@@ -11,8 +11,12 @@ XOPlayer::XOPlayer(TreeNode &tree, PlayField::csState symbol): Tree(tree) {
 }
 
 void XOPlayer::selectPlayer(PlayField::csState symbol) {
-    assert(symbol != PlayField::csEmpty);
-    Bot = (symbol == PlayField::csCross) ? PlayField::csNought : PlayField::csCross;
+    if(symbol == PlayField::csCross) 
+	Bot = PlayField::csNought;
+    else if(symbol == PlayField::csNought)
+	Bot = PlayField::csCross;
+    else
+	assert("The player contains an invalid csState" && false);
 }
 
 void XOPlayer::makeMove(PlayField::CellPos iCell) {
@@ -25,8 +29,8 @@ void XOPlayer::makeMove(PlayField::CellPos iCell) {
 }
 
 bool XOPlayer::isBestMove(const TreeNode &goodTurn,const TreeNode &current) const {
-    return Bot == PlayField::csCross && current.getCrossesWinRatio() > goodTurn.getCrossesWinRatio()
-           || Bot == PlayField::csNought && current.getNoughtsWinRatio() > goodTurn.getNoughtsWinRatio();
+    return (Bot == PlayField::csCross && current.getCrossesWinRatio() > goodTurn.getCrossesWinRatio())
+           || (Bot == PlayField::csNought && current.getNoughtsWinRatio() > goodTurn.getNoughtsWinRatio());
 }
 
 void XOPlayer::makeMove() {
